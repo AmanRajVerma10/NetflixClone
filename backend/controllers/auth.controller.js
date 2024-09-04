@@ -48,7 +48,7 @@ export async function signup(req, res) {
       image,
     });
 
-    generateTokenAndSetCookie(newUser._id,res);
+    generateTokenAndSetCookie(newUser._id, res);
     await newUser.save();
     return res.status(200).json({
       status: true,
@@ -65,10 +65,52 @@ export async function signup(req, res) {
   }
 }
 
-export function login(req, res) {
-  res.send("Login");
+export async function login(req, res) {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ status: false, message: "All fields are required" });
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Invalid Credentials" });
+    }
+    const isPasswordCorrect = await bcryptjs.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Invalid Credentials" });
+    }
+    generateTokenAndSetCookie(user._id, res);
+    return res.status(200).json({
+      status: true,
+      user: {
+        ...user._doc,
+        password: "",
+      },
+    });
+  } catch (error) {
+    console.log("Error in login controller", error.message);
+    return res
+      .status(500)
+      .json({ status: false, message: "Internal Server Error" });
+  }
 }
 
 export function logout(req, res) {
-  res.send("Logout");
+  try {
+    res.clearCookie("jwt-netflix");
+    return res
+      .status(200)
+      .json({ status: true, message: "User logged out successfully" });
+  } catch (error) {
+    console.log("Error in logout controller", error.message);
+    return res
+      .status(500)
+      .json({ status: false, message: "Internal Server Error" });
+  }
 }

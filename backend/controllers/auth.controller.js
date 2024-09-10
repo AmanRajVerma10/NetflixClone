@@ -101,7 +101,7 @@ export async function login(req, res) {
   }
 }
 
-export function logout(req, res) {
+export async function logout(req, res) {
   try {
     res.clearCookie("jwt-netflix");
     return res
@@ -112,5 +112,16 @@ export function logout(req, res) {
     return res
       .status(500)
       .json({ status: false, message: "Internal Server Error" });
+  }
+}
+
+export async function authCheck(req, res) {
+  try {
+    return res.status(200).json({ success: true, user: req.user });
+  } catch (error) {
+    console.log("error in authCheck controller:", error.message);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 }

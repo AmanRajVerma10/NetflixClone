@@ -5,7 +5,7 @@ import { useAuthStore } from "../../store/AuthUser";
 
 const HomePage = () => {
   const { user } = useAuthStore();
-  return <div>{user ? <HomeScreen /> : <AuthScreen />}</div>;
+  return <>{user ? <HomeScreen /> : <AuthScreen />}</>;
 };
 
 export default HomePage;

@@ -9,7 +9,7 @@ const MovieSlider = ({ category }) => {
   const { contentType } = useContentStore();
   const [content, setContent] = useState([]);
   const [showArrows, setShowArrows] = useState(false);
-  const sliderRef=useRef(null);
+  const sliderRef = useRef(null);
 
   useEffect(() => {
     const getContent = async () => {
@@ -18,15 +18,21 @@ const MovieSlider = ({ category }) => {
     };
     getContent();
   }, [contentType, category]);
-  console.log(content);
-  const scrollLeft=()=>{
+
+  const scrollLeft = () => {
     if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: -sliderRef.current.offsetWidth, behavior: "smooth" });
+      sliderRef.current.scrollBy({
+        left: -sliderRef.current.offsetWidth,
+        behavior: "smooth",
+      });
     }
-  }
-  const scrollRight=()=>{
+  };
+  const scrollRight = () => {
     if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: sliderRef.current.offsetWidth, behavior: "smooth" });
+      sliderRef.current.scrollBy({
+        left: sliderRef.current.offsetWidth,
+        behavior: "smooth",
+      });
     }
   };
   const formattedCategoryName =
@@ -46,7 +52,10 @@ const MovieSlider = ({ category }) => {
       <h2 className="mb-4 text-2xl font-bold">
         {formattedCategoryName + " " + formattedContentType}
       </h2>
-      <div className="flex space-x-4 overflow-x-scroll scrollbar-hide" ref={sliderRef}>
+      <div
+        className="flex space-x-4 overflow-x-scroll scrollbar-hide"
+        ref={sliderRef}
+      >
         {content?.map((item) => (
           <Link
             to={`/watch/${item.id}`}

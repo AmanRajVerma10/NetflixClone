@@ -2,11 +2,18 @@ import { Info, Play } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import useGetTrendingContent from "../../hooks/useGetTrendingContent";
-import { ORIGINAL_IMG_BASE_URL } from "../../utils/constants";
+import {
+  MOVIE_CATEGORIES,
+  ORIGINAL_IMG_BASE_URL,
+  TV_CATEGORIES,
+} from "../../utils/constants";
+import { useContentStore } from "../../store/content";
+import MovieSlider from "../../components/MovieSlider";
 
 const HomeScreen = () => {
   const { trendingContent } = useGetTrendingContent();
   console.log(trendingContent);
+  const { contentType } = useContentStore();
   if (!trendingContent)
     return (
       <div className="h-screen text-white relative">
@@ -56,7 +63,7 @@ const HomeScreen = () => {
 
           <div className="flex mt-8">
             <Link
-              to={`/watch`}
+              to={`/watch/${trendingContent?.id}`}
               className="bg-white hover:bg-white/80 text-black font-bold py-2 px-4 rounded mr-4 flex
 							 items-center"
             >
@@ -65,7 +72,7 @@ const HomeScreen = () => {
             </Link>
 
             <Link
-              to={`/watch`}
+              to={`/watch/${trendingContent?.id}`}
               className="bg-gray-500/70 hover:bg-gray-500 text-white py-2 px-4 rounded flex items-center"
             >
               <Info className="size-6 mr-2" />
@@ -73,6 +80,15 @@ const HomeScreen = () => {
             </Link>
           </div>
         </div>
+      </div>
+      <div className="flex flex-col gap-10 bg-black py-10">
+        {contentType === "movie"
+          ? MOVIE_CATEGORIES.map((category) => (
+              <MovieSlider key={category} category={category} />
+            ))
+          : TV_CATEGORIES.map((category) => (
+              <MovieSlider key={category} category={category} />
+            ))}
       </div>
     </>
   );

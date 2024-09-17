@@ -6,13 +6,13 @@ const SignUpPage = () => {
   const { searchParams } = new URL(document.location);
   const emailValue = searchParams.get("email");
 
-  const { signUp } = useAuthStore();
+  const { signUp, isSigningUp } = useAuthStore();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState(emailValue || "");
   const handleSignUp = (e) => {
     e.preventDefault();
-    signUp({email, password, username});
+    signUp({ email, password, username });
   };
   return (
     <div className="h-screen w-full hero-bg">
@@ -84,8 +84,9 @@ const SignUpPage = () => {
             <button
               className="w-full py-2 bg-red-600 text-white font-semibold rounded-md
 							hover:bg-red-700"
+              disabled={isSigningUp}
             >
-              {"Sign Up"}
+              {isSigningUp ? "Signing Up..." : "Sign Up"}
             </button>
           </form>
           <div className="text-center text-gray-400">

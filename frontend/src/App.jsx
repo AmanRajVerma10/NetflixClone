@@ -17,7 +17,7 @@ function App() {
   useEffect(() => {
     authCheck();
   }, []);
-  console.log(user);
+  
   if (isCheckingAuth) {
     return (
       <div className="h-screen">

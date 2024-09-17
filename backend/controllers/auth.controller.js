@@ -8,16 +8,16 @@ export async function signup(req, res) {
     if (!username || !email || !password) {
       return res
         .status(400)
-        .json({ status: false, message: "Require all fields" });
+        .json({ success: false, message: "Require all fields" });
     }
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
-      return res.status(400).json({ status: false, message: "Invalid email" });
+      return res.status(400).json({ success: false, message: "Invalid email" });
     }
     if (password.length < 6) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: "Password must contain at least 6 characters",
       });
     }
@@ -26,13 +26,13 @@ export async function signup(req, res) {
     if (existingUserByEmail) {
       return res
         .status(400)
-        .json({ status: false, message: "Email already exists" });
+        .json({ success: false, message: "Email already exists" });
     }
     const existingUserByUsername = await User.findOne({ username });
     if (existingUserByUsername) {
       return res
         .status(400)
-        .json({ status: false, message: "Username already exists" });
+        .json({ success: false, message: "Username already exists" });
     }
 
     const salt = await bcryptjs.genSalt(10);
@@ -51,7 +51,7 @@ export async function signup(req, res) {
     generateTokenAndSetCookie(newUser._id, res);
     await newUser.save();
     return res.status(200).json({
-      status: true,
+      success: true,
       user: {
         ...newUser._doc,
         password: "",
@@ -61,7 +61,7 @@ export async function signup(req, res) {
     console.log("Error in signup controller:", error.message);
     return res
       .status(500)
-      .json({ status: 500, message: "Internal Server Error" });
+      .json({ success: false, message: "Internal Server Error" });
   }
 }
 
@@ -71,23 +71,23 @@ export async function login(req, res) {
     if (!email || !password) {
       return res
         .status(400)
-        .json({ status: false, message: "All fields are required" });
+        .json({ success: false, message: "All fields are required" });
     }
     const user = await User.findOne({ email });
     if (!user) {
       return res
         .status(404)
-        .json({ status: false, message: "Invalid Credentials" });
+        .json({ success: false, message: "Invalid Credentials" });
     }
     const isPasswordCorrect = await bcryptjs.compare(password, user.password);
     if (!isPasswordCorrect) {
       return res
         .status(404)
-        .json({ status: false, message: "Invalid Credentials" });
+        .json({ success: false, message: "Invalid Credentials" });
     }
     generateTokenAndSetCookie(user._id, res);
     return res.status(200).json({
-      status: true,
+      success: true,
       user: {
         ...user._doc,
         password: "",
@@ -97,7 +97,7 @@ export async function login(req, res) {
     console.log("Error in login controller", error.message);
     return res
       .status(500)
-      .json({ status: false, message: "Internal Server Error" });
+      .json({ success: false, message: "Internal Server Error" });
   }
 }
 
@@ -106,12 +106,12 @@ export async function logout(req, res) {
     res.clearCookie("jwt-netflix");
     return res
       .status(200)
-      .json({ status: true, message: "User logged out successfully" });
+      .json({ success: true, message: "User logged out successfully" });
   } catch (error) {
     console.log("Error in logout controller", error.message);
     return res
       .status(500)
-      .json({ status: false, message: "Internal Server Error" });
+      .json({ success: false, message: "Internal Server Error" });
   }
 }
 

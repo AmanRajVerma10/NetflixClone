@@ -7,12 +7,12 @@ export const getTrendingTv = async (req, res) => {
     );
     const randomTv =
       data.results[Math.floor(Math.random() * data.results?.length)];
-    return res.status(200).json({ status: true, content: randomTv });
+    return res.status(200).json({ success: true, content: randomTv });
   } catch (error) {
     console.log("Error in controller", error.message);
     return res
       .status(500)
-      .json({ status: false, message: "Internal Server Error" });
+      .json({ success: false, message: "Internal Server Error" });
   }
 };
 

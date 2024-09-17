@@ -5,7 +5,7 @@ import HomePage from "./pages/home/HomePage";
 import WatchPage from "./pages/WatchPage";
 import Footer from "./components/Footer";
 import { Toaster } from "react-hot-toast";
-import { useAuthStore } from "./store/AuthUser";
+import { useAuthStore } from "./store/authUser";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
 import SearchPage from "./pages/SearchPage";

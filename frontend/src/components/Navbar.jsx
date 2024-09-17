@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuthStore } from "../store/AuthUser";
+import { useAuthStore } from "../store/authUser";
 import { LogOut, Menu, Search } from "lucide-react";
 import { useContentStore } from "../store/content";
 

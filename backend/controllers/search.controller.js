@@ -10,17 +10,25 @@ export const searchPerson = async (req, res) => {
     if (response.results.length == 0) {
       return res.status(404).send(null);
     }
-    await User.findByIdAndUpdate(req.user._id, {
-      $push: {
-        searchHistory: {
-          id: response.results[0].id,
-          image: response.results[0].profile_path,
-          searchType: "person",
-          title: response.results[0].name,
-          createdAt: new Date(),
+
+    const personExists = req.user.searchHistory.some(
+      (history) => history.id === response.results[0].id
+    );
+
+    if (!personExists) {
+      await User.findByIdAndUpdate(req.user._id, {
+        $push: {
+          searchHistory: {
+            id: response.results[0].id,
+            image: response.results[0].profile_path,
+            searchType: "person",
+            title: response.results[0].name,
+            createdAt: new Date(),
+          },
         },
-      },
-    });
+      });
+    }
+
     return res.status(200).json({ success: true, content: response.results });
   } catch (error) {
     console.log("Error in searchPerson Controller", error.message);
@@ -39,17 +47,23 @@ export const searchMovie = async (req, res) => {
     if (response.results.length == 0) {
       return res.status(404).send(null);
     }
-    await User.findByIdAndUpdate(req.user._id, {
-      $push: {
-        searchHistory: {
-          id: response.results[0].id,
-          image: response.results[0].poster_path,
-          searchType: "movie",
-          title: response.results[0].title,
-          createdAt: new Date(),
+    const movieExists = req.user.searchHistory.some(
+      (history) => history.id === response.results[0].id
+    );
+    if (!movieExists) {
+      await User.findByIdAndUpdate(req.user._id, {
+        $push: {
+          searchHistory: {
+            id: response.results[0].id,
+            image: response.results[0].poster_path,
+            searchType: "movie",
+            title: response.results[0].title,
+            createdAt: new Date(),
+          },
         },
-      },
-    });
+      });
+    }
+
     return res.status(200).json({ success: true, content: response.results });
   } catch (error) {
     console.log("Error in searchMovie Controller", error.message);
@@ -68,17 +82,23 @@ export const searchTv = async (req, res) => {
     if (response.results.length == 0) {
       return res.status(404).send(null);
     }
-    await User.findByIdAndUpdate(req.user._id, {
-      $push: {
-        searchHistory: {
-          id: response.results[0].id,
-          image: response.results[0].poster_path,
-          searchType: "tv",
-          title: response.results[0].name,
-          createdAt: new Date(),
+    const tvExists = req.user.searchHistory.some(
+      (history) => history.id === response.results[0].id
+    );
+    if (!tvExists) {
+      await User.findByIdAndUpdate(req.user._id, {
+        $push: {
+          searchHistory: {
+            id: response.results[0].id,
+            image: response.results[0].poster_path,
+            searchType: "tv",
+            title: response.results[0].name,
+            createdAt: new Date(),
+          },
         },
-      },
-    });
+      });
+    }
+
     return res.status(200).json({ success: true, content: response.results });
   } catch (error) {
     console.log("Error in searchTv Controller", error.message);
